@@ -1,0 +1,4618 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#111111">
+
+<title>💕 Sweet Booth</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:#111;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+body{
+  color:#fff;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#111;
+}
+
+/* =========================================================
+   CAMERA PAGE
+========================================================= */
+
+#cameraPage{
+  position:absolute;
+  inset:0;
+
+  display:flex;
+  flex-direction:column;
+
+  min-height:0;
+
+  overflow:hidden;
+
+  background:#111;
+}
+
+#cameraArea{
+  position:relative;
+
+  flex:1 1 auto;
+
+  min-height:0;
+
+  overflow:hidden;
+
+  background:#000;
+}
+
+#video{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  background:#000;
+
+  transform-origin:center center;
+
+  transition:
+    transform .18s ease,
+    opacity .2s ease;
+}
+
+#cameraShade{
+  position:absolute;
+  inset:0;
+
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.35),
+      transparent 20%,
+      transparent 70%,
+      rgba(0,0,0,.45)
+    );
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topBar{
+  position:absolute;
+  z-index:10;
+
+  top:
+    calc(
+      12px +
+      env(safe-area-inset-top)
+    );
+
+  left:12px;
+  right:12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  pointer-events:none;
+}
+
+.brand{
+  padding:8px 13px;
+
+  border-radius:999px;
+
+  background:rgba(0,0,0,.42);
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  font-size:13px;
+  font-weight:800;
+
+  letter-spacing:.3px;
+}
+
+.topButtons{
+  display:flex;
+  gap:8px;
+}
+
+.circleBtn{
+  width:42px;
+  height:42px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:rgba(0,0,0,.45);
+
+  color:#fff;
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  font-size:19px;
+
+  pointer-events:auto;
+
+  transition:
+    transform .15s ease,
+    background .15s ease;
+}
+
+.circleBtn:active{
+  transform:scale(.9);
+  background:rgba(255,255,255,.25);
+}
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+.zoomBox{
+  position:absolute;
+
+  z-index:12;
+
+  left:50%;
+
+  bottom:22px;
+
+  transform:translateX(-50%);
+
+  width:min(88%,420px);
+
+  padding:9px 12px 11px;
+
+  border-radius:20px;
+
+  background:rgba(0,0,0,.48);
+
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+}
+
+.zoomHeader{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-bottom:4px;
+
+  color:#fff;
+
+  font-size:13px;
+  font-weight:800;
+}
+
+#zoomValue{
+  min-width:50px;
+  text-align:center;
+}
+
+.zoomControls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.zoomButton{
+  width:34px;
+  height:34px;
+
+  flex:0 0 34px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.16);
+
+  color:#fff;
+
+  font-size:20px;
+  font-weight:800;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:
+    transform .12s ease,
+    background .12s ease;
+}
+
+.zoomButton:active{
+  transform:scale(.88);
+  background:rgba(255,255,255,.28);
+}
+
+#zoomRange{
+  flex:1;
+
+  height:30px;
+
+  appearance:none;
+  -webkit-appearance:none;
+
+  background:transparent;
+
+  cursor:pointer;
+}
+
+#zoomRange::-webkit-slider-runnable-track{
+  height:4px;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.3);
+}
+
+#zoomRange::-webkit-slider-thumb{
+  appearance:none;
+  -webkit-appearance:none;
+
+  width:20px;
+  height:20px;
+
+  margin-top:-8px;
+
+  border-radius:50%;
+
+  border:2px solid #fff;
+
+  background:#ff4f91;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.4);
+}
+
+#zoomRange::-moz-range-track{
+  height:4px;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.3);
+}
+
+#zoomRange::-moz-range-thumb{
+  width:20px;
+  height:20px;
+
+  border-radius:50%;
+
+  border:2px solid #fff;
+
+  background:#ff4f91;
+}
+
+/* =========================================================
+   START
+========================================================= */
+
+#startOverlay{
+  position:absolute;
+  inset:0;
+
+  z-index:50;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:25px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255,105,160,.25),
+      rgba(0,0,0,.92) 65%
+    );
+}
+
+.startCard{
+  width:min(90%,360px);
+
+  padding:30px 24px;
+
+  text-align:center;
+
+  border-radius:28px;
+
+  background:rgba(255,255,255,.1);
+
+  border:
+    1px solid
+    rgba(255,255,255,.16);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.startIcon{
+  font-size:52px;
+
+  margin-bottom:12px;
+}
+
+.startCard h1{
+  margin:0 0 8px;
+
+  font-size:26px;
+}
+
+.startCard p{
+  margin:0 0 20px;
+
+  color:rgba(255,255,255,.72);
+
+  font-size:14px;
+  line-height:1.5;
+}
+
+.primaryBtn{
+  width:100%;
+
+  min-height:52px;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff4f91,
+      #ff78aa
+    );
+
+  color:#fff;
+
+  font-weight:800;
+
+  font-size:16px;
+
+  box-shadow:
+    0 8px 25px
+    rgba(255,79,145,.3);
+
+  transition:
+    transform .15s ease,
+    opacity .15s ease;
+}
+
+.primaryBtn:active{
+  transform:scale(.97);
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+#errorBox{
+  position:absolute;
+
+  z-index:60;
+
+  left:15px;
+  right:15px;
+
+  top:
+    calc(
+      75px +
+      env(safe-area-inset-top)
+    );
+
+  display:none;
+
+  padding:13px 15px;
+
+  border-radius:15px;
+
+  background:rgba(170,20,50,.92);
+
+  color:#fff;
+
+  font-size:13px;
+
+  line-height:1.45;
+
+  box-shadow:
+    0 8px 30px
+    rgba(0,0,0,.3);
+}
+
+/* =========================================================
+   FLASH
+========================================================= */
+
+#flash{
+  position:absolute;
+  inset:0;
+
+  z-index:100;
+
+  pointer-events:none;
+
+  background:#fff;
+
+  opacity:0;
+}
+
+.flashAnim{
+  animation:
+    flashAnimation
+    .28s
+    ease;
+}
+
+@keyframes flashAnimation{
+
+  0%{
+    opacity:0;
+  }
+
+  25%{
+    opacity:.95;
+  }
+
+  100%{
+    opacity:0;
+  }
+
+}
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+#countdown{
+  position:absolute;
+  inset:0;
+
+  z-index:90;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  pointer-events:none;
+}
+
+#countdownNumber{
+  width:130px;
+  height:130px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:rgba(0,0,0,.3);
+
+  border:
+    3px solid
+    rgba(255,255,255,.75);
+
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+
+  font-size:76px;
+
+  font-weight:900;
+
+  text-shadow:
+    0 4px 20px
+    rgba(0,0,0,.5);
+
+  animation:
+    countPop
+    .65s
+    ease;
+}
+
+@keyframes countPop{
+
+  0%{
+    transform:scale(.35);
+    opacity:0;
+  }
+
+  50%{
+    transform:scale(1.12);
+    opacity:1;
+  }
+
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+
+}
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+#controls{
+  position:relative;
+
+  flex:0 0 auto;
+
+  z-index:20;
+
+  padding:
+    10px
+    12px
+    calc(
+      10px +
+      env(safe-area-inset-bottom)
+    );
+
+  background:
+    linear-gradient(
+      to bottom,
+      #181818,
+      #101010
+    );
+
+  overflow:visible;
+}
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.filters{
+  display:flex;
+
+  gap:8px;
+
+  overflow-x:auto;
+
+  overflow-y:hidden;
+
+  padding:
+    2px
+    1px
+    8px;
+
+  scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.filterBtn{
+  flex:0 0 auto;
+
+  padding:7px 12px;
+
+  border-radius:999px;
+
+  background:#292929;
+
+  color:#ddd;
+
+  font-size:12px;
+
+  font-weight:700;
+
+  transition:.15s ease;
+}
+
+.filterBtn.active{
+  background:#ff4f91;
+
+  color:#fff;
+}
+
+.filterBtn:active{
+  transform:scale(.94);
+}
+
+/* =========================================================
+   MAIN CONTROLS
+========================================================= */
+
+.mainControls{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:12px;
+
+  min-height:72px;
+}
+
+.sideAction{
+  width:48px;
+  height:48px;
+
+  flex:0 0 48px;
+
+  border-radius:50%;
+
+  background:#292929;
+
+  color:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:20px;
+
+  transition:.15s ease;
+}
+
+.sideAction:active{
+  transform:scale(.9);
+}
+
+.captureButton{
+  width:68px;
+  height:68px;
+
+  flex:0 0 68px;
+
+  border-radius:50%;
+
+  padding:5px;
+
+  background:#fff;
+
+  box-shadow:
+    0 4px 20px
+    rgba(0,0,0,.35);
+
+  transition:
+    transform .15s ease;
+}
+
+.captureButton::after{
+  content:"";
+
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff4f91,
+      #ff83b1
+    );
+
+  border:
+    3px solid
+    #171717;
+}
+
+.captureButton:active{
+  transform:scale(.88);
+}
+
+.captureButton:disabled{
+  opacity:.5;
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progressArea{
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-top:5px;
+}
+
+.progressText{
+  min-width:58px;
+
+  color:#aaa;
+
+  font-size:12px;
+
+  font-weight:700;
+}
+
+.progressTrack{
+  flex:1;
+
+  height:5px;
+
+  overflow:hidden;
+
+  border-radius:999px;
+
+  background:#2b2b2b;
+}
+
+#progressBar{
+  width:0%;
+  height:100%;
+
+  border-radius:999px;
+
+  background:#ff4f91;
+
+  transition:
+    width .25s ease;
+}
+
+/* =========================================================
+   FRAME PANEL
+========================================================= */
+
+#framePanel{
+  position:absolute;
+
+  z-index:30;
+
+  left:12px;
+  right:12px;
+
+  bottom:
+    calc(
+      102px +
+      env(safe-area-inset-bottom)
+    );
+
+  display:none;
+
+  padding:14px;
+
+  border-radius:20px;
+
+  background:rgba(25,25,25,.96);
+
+  box-shadow:
+    0 12px 35px
+    rgba(0,0,0,.45);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+#framePanel.show{
+  display:block;
+}
+
+.frameTitle{
+  margin-bottom:10px;
+
+  color:#fff;
+
+  font-size:13px;
+
+  font-weight:800;
+}
+
+.frameOptions{
+  display:flex;
+
+  gap:8px;
+}
+
+.frameBtn{
+  flex:1;
+
+  min-height:42px;
+
+  border-radius:12px;
+
+  background:#303030;
+
+  color:#eee;
+
+  font-size:12px;
+
+  font-weight:700;
+}
+
+.frameBtn.active{
+  background:#ff4f91;
+}
+
+/* =========================================================
+   RESULT PAGE
+========================================================= */
+
+#resultPage{
+  position:absolute;
+  inset:0;
+
+  z-index:200;
+
+  display:none;
+
+  flex-direction:column;
+
+  min-height:0;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at top,
+      #35202b,
+      #111 55%
+    );
+}
+
+#resultPage.show{
+  display:flex;
+}
+
+.resultTop{
+  flex:0 0 auto;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  padding:
+    calc(
+      12px +
+      env(safe-area-inset-top)
+    )
+    15px
+    12px;
+}
+
+.resultTitle{
+  font-size:18px;
+
+  font-weight:900;
+}
+
+.resultActions{
+  display:flex;
+
+  gap:7px;
+}
+
+.resultButton{
+  min-height:40px;
+
+  padding:0 12px;
+
+  border-radius:999px;
+
+  background:#292929;
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:800;
+}
+
+.resultButton.download{
+  background:#ff4f91;
+}
+
+.resultScroll{
+  flex:1 1 auto;
+
+  min-height:0;
+
+  overflow-y:auto;
+
+  padding:
+    10px
+    18px
+    calc(
+      30px +
+      env(safe-area-inset-bottom)
+    );
+}
+
+#stripCanvas{
+  display:block;
+
+  width:min(100%,430px);
+
+  height:auto;
+
+  margin:0 auto;
+
+  border-radius:12px;
+
+  background:#fff;
+
+  box-shadow:
+    0 18px 55px
+    rgba(0,0,0,.55);
+}
+
+/* =========================================================
+   PHOTO SELECTOR
+========================================================= */
+
+.photoSelector{
+  width:min(100%,430px);
+
+  margin:
+    16px
+    auto
+    0;
+}
+
+.selectorTitle{
+  text-align:center;
+
+  margin-bottom:9px;
+
+  color:#bbb;
+
+  font-size:12px;
+
+  font-weight:700;
+}
+
+.photoSlots{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:8px;
+}
+
+.photoSlot{
+  position:relative;
+
+  aspect-ratio:3 / 4;
+
+  overflow:hidden;
+
+  padding:0;
+
+  border-radius:13px;
+
+  background:#242424;
+
+  border:
+    2px solid
+    transparent;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease;
+}
+
+.photoSlot:active{
+  transform:scale(.95);
+}
+
+.photoSlot.selected{
+  border-color:#ff4f91;
+
+  box-shadow:
+    0 0 0 2px
+    rgba(255,79,145,.2);
+}
+
+.photoSlot img{
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  object-fit:cover;
+}
+
+.slotNumber{
+  position:absolute;
+
+  top:5px;
+  left:5px;
+
+  width:23px;
+  height:23px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:rgba(0,0,0,.6);
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:900;
+}
+
+.selectedMark{
+  position:absolute;
+
+  right:5px;
+  bottom:5px;
+
+  width:23px;
+  height:23px;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:#ff4f91;
+
+  color:#fff;
+
+  font-size:13px;
+
+  font-weight:900;
+}
+
+.photoSlot.selected
+.selectedMark{
+  display:flex;
+}
+
+.retakeButton{
+  width:min(100%,430px);
+
+  min-height:48px;
+
+  display:block;
+
+  margin:
+    12px
+    auto
+    0;
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff4f91,
+      #ff76a9
+    );
+
+  color:#fff;
+
+  font-size:14px;
+
+  font-weight:900;
+
+  box-shadow:
+    0 8px 25px
+    rgba(255,79,145,.2);
+
+  transition:
+    transform .15s ease;
+}
+
+.retakeButton:active{
+  transform:scale(.97);
+}
+
+.resultHint{
+  width:min(100%,430px);
+
+  margin:13px auto 0;
+
+  text-align:center;
+
+  color:#888;
+
+  font-size:11px;
+
+  line-height:1.5;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+#loading{
+  position:absolute;
+  inset:0;
+
+  z-index:80;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(0,0,0,.5);
+
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+
+#loading.show{
+  display:flex;
+}
+
+.loadingCard{
+  padding:18px 22px;
+
+  border-radius:18px;
+
+  background:rgba(30,30,30,.95);
+
+  text-align:center;
+}
+
+.spinner{
+  width:32px;
+  height:32px;
+
+  margin:0 auto 10px;
+
+  border:
+    3px solid
+    rgba(255,255,255,.2);
+
+  border-top-color:#ff4f91;
+
+  border-radius:50%;
+
+  animation:
+    spin
+    .8s
+    linear
+    infinite;
+}
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+.loadingText{
+  color:#fff;
+
+  font-size:13px;
+}
+
+/* =========================================================
+   SMALL HEIGHT
+========================================================= */
+
+@media(max-height:650px){
+
+  .zoomBox{
+    bottom:10px;
+    padding:6px 10px;
+  }
+
+  .zoomButton{
+    width:30px;
+    height:30px;
+    flex-basis:30px;
+  }
+
+  .mainControls{
+    min-height:62px;
+  }
+
+  .captureButton{
+    width:58px;
+    height:58px;
+    flex-basis:58px;
+  }
+
+  .sideAction{
+    width:42px;
+    height:42px;
+    flex-basis:42px;
+  }
+
+  #controls{
+    padding-top:6px;
+  }
+
+  .filters{
+    padding-bottom:4px;
+  }
+
+}
+
+/* =========================================================
+   LANDSCAPE
+========================================================= */
+
+@media(
+  orientation:landscape
+) and (max-height:600px){
+
+  #controls{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    background:
+      linear-gradient(
+        to top,
+        rgba(0,0,0,.95),
+        rgba(0,0,0,.65)
+      );
+  }
+
+  #cameraArea{
+    height:100%;
+  }
+
+  .zoomBox{
+    bottom:95px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- =======================================================
+     CAMERA PAGE
+======================================================== -->
+
+<section id="cameraPage">
+
+  <div id="cameraArea">
+
+    <video
+      id="video"
+      autoplay
+      playsinline
+      muted
+    ></video>
+
+    <div id="cameraShade"></div>
+
+    <!-- TOP -->
+
+    <div class="topBar">
+
+      <div class="brand">
+        💕 SWEET BOOTH
+      </div>
+
+      <div class="topButtons">
+
+        <button
+          id="flipBtn"
+          class="circleBtn"
+          type="button"
+        >
+          🔄
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ZOOM -->
+
+    <div class="zoomBox">
+
+      <div class="zoomHeader">
+        <span id="zoomValue">
+          1.0×
+        </span>
+      </div>
+
+      <div class="zoomControls">
+
+        <button
+          id="zoomMinus"
+          class="zoomButton"
+          type="button"
+        >
+          −
+        </button>
+
+        <input
+          id="zoomRange"
+          type="range"
+          min="1"
+          max="4"
+          step="0.1"
+          value="1"
+        >
+
+        <button
+          id="zoomPlus"
+          class="zoomButton"
+          type="button"
+        >
+          +
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- START -->
+
+    <div id="startOverlay">
+
+      <div class="startCard">
+
+        <div class="startIcon">
+          📸
+        </div>
+
+        <h1>
+          Sweet Photobooth
+        </h1>
+
+        <p>
+          Chụp 4 tấm ảnh thật cute
+          và tạo thành photobooth strip
+          cho hai đứa 💕
+        </p>
+
+        <button
+          id="startBtn"
+          class="primaryBtn"
+          type="button"
+        >
+          Mở camera ✨
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div id="errorBox"></div>
+
+
+    <!-- COUNTDOWN -->
+
+    <div id="countdown">
+
+      <div id="countdownNumber">
+        3
+      </div>
+
+    </div>
+
+
+    <!-- FLASH -->
+
+    <div id="flash"></div>
+
+
+    <!-- LOADING -->
+
+    <div id="loading">
+
+      <div class="loadingCard">
+
+        <div class="spinner"></div>
+
+        <div
+          id="loadingText"
+          class="loadingText"
+        >
+          Đang xử lý...
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CONTROLS
+  ====================================================== -->
+
+  <div id="controls">
+
+    <div class="filters">
+
+      <button
+        class="filterBtn active"
+        data-filter="original"
+        type="button"
+      >
+        Original
+      </button>
+
+      <button
+        class="filterBtn"
+        data-filter="warm"
+        type="button"
+      >
+        ☀️ Warm
+      </button>
+
+      <button
+        class="filterBtn"
+        data-filter="pink"
+        type="button"
+      >
+        🌸 Pink
+      </button>
+
+      <button
+        class="filterBtn"
+        data-filter="film"
+        type="button"
+      >
+        🎞️ Film
+      </button>
+
+      <button
+        class="filterBtn"
+        data-filter="bw"
+        type="button"
+      >
+        🖤 B&W
+      </button>
+
+    </div>
+
+
+    <div class="mainControls">
+
+      <button
+        id="frameBtn"
+        class="sideAction"
+        type="button"
+      >
+        🖼️
+      </button>
+
+
+      <button
+        id="captureBtn"
+        class="captureButton"
+        type="button"
+      ></button>
+
+
+      <button
+        id="resetZoomBtn"
+        class="sideAction"
+        type="button"
+      >
+        1×
+      </button>
+
+    </div>
+
+
+    <div class="progressArea">
+
+      <div
+        id="progressText"
+        class="progressText"
+      >
+        0 / 4
+      </div>
+
+      <div class="progressTrack">
+
+        <div id="progressBar"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- FRAME PANEL -->
+
+  <div id="framePanel">
+
+    <div class="frameTitle">
+      Chọn kiểu khung 💕
+    </div>
+
+    <div class="frameOptions">
+
+      <button
+        class="frameBtn active"
+        data-frame="white"
+        type="button"
+      >
+        🤍 White
+      </button>
+
+      <button
+        class="frameBtn"
+        data-frame="pink"
+        type="button"
+      >
+        🌸 Pink
+      </button>
+
+      <button
+        class="frameBtn"
+        data-frame="black"
+        type="button"
+      >
+        🖤 Black
+      </button>
+
+      <button
+        class="frameBtn"
+        data-frame="flower"
+        type="button"
+      >
+        🌷 Flower
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     RESULT PAGE
+======================================================== -->
+
+<section id="resultPage">
+
+  <div class="resultTop">
+
+    <div class="resultTitle">
+      💕 Ảnh của chúng mình
+    </div>
+
+    <div class="resultActions">
+
+      <button
+        id="againBtn"
+        class="resultButton"
+        type="button"
+      >
+        Chụp lại hết
+      </button>
+
+      <button
+        id="downloadBtn"
+        class="resultButton download"
+        type="button"
+      >
+        Tải ảnh
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="resultScroll">
+
+    <canvas
+      id="stripCanvas"
+    ></canvas>
+
+
+    <!-- ===================================================
+         SELECT PHOTO
+    ==================================================== -->
+
+    <div class="photoSelector">
+
+      <div class="selectorTitle">
+        Chọn ảnh muốn chụp lại 💗
+      </div>
+
+      <div
+        id="photoSlots"
+        class="photoSlots"
+      ></div>
+
+    </div>
+
+
+    <button
+      id="retakeSelectedBtn"
+      class="retakeButton"
+      type="button"
+    >
+      📸 Chụp lại ảnh số 1
+    </button>
+
+
+    <div class="resultHint">
+      Bấm vào một ảnh bên trên để chọn ảnh cần chụp lại.
+      Các ảnh còn lại sẽ được giữ nguyên 💕
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+
+<script>
+(() => {
+
+"use strict";
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const video =
+  document.getElementById("video");
+
+const cameraPage =
+  document.getElementById("cameraPage");
+
+const resultPage =
+  document.getElementById("resultPage");
+
+const startOverlay =
+  document.getElementById("startOverlay");
+
+const startBtn =
+  document.getElementById("startBtn");
+
+const captureBtn =
+  document.getElementById("captureBtn");
+
+const flipBtn =
+  document.getElementById("flipBtn");
+
+const frameBtn =
+  document.getElementById("frameBtn");
+
+const framePanel =
+  document.getElementById("framePanel");
+
+const resetZoomBtn =
+  document.getElementById("resetZoomBtn");
+
+const zoomRange =
+  document.getElementById("zoomRange");
+
+const zoomMinus =
+  document.getElementById("zoomMinus");
+
+const zoomPlus =
+  document.getElementById("zoomPlus");
+
+const zoomValue =
+  document.getElementById("zoomValue");
+
+const countdown =
+  document.getElementById("countdown");
+
+const countdownNumber =
+  document.getElementById("countdownNumber");
+
+const flash =
+  document.getElementById("flash");
+
+const errorBox =
+  document.getElementById("errorBox");
+
+const progressText =
+  document.getElementById("progressText");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const stripCanvas =
+  document.getElementById("stripCanvas");
+
+const againBtn =
+  document.getElementById("againBtn");
+
+const downloadBtn =
+  document.getElementById("downloadBtn");
+
+const loading =
+  document.getElementById("loading");
+
+const loadingText =
+  document.getElementById("loadingText");
+
+const photoSlots =
+  document.getElementById("photoSlots");
+
+const retakeSelectedBtn =
+  document.getElementById(
+    "retakeSelectedBtn"
+  );
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let stream = null;
+
+let videoTrack = null;
+
+let facingMode = "user";
+
+let cameraStarted = false;
+
+let isCapturing = false;
+
+let photos = [];
+
+let selectedPhotoIndex = 0;
+
+let replacingPhoto = false;
+
+let selectedFilter = "original";
+
+let selectedFrame = "white";
+
+let currentZoom = 1;
+
+let realZoomSupported = false;
+
+let realZoomMin = 1;
+
+let realZoomMax = 1;
+
+let realZoomStep = .1;
+
+let fallbackZoom = 1;
+
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const PHOTO_COUNT = 4;
+
+const PHOTO_WIDTH = 900;
+
+const PHOTO_HEIGHT = 1200;
+
+const MAX_ZOOM = 4;
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+const filters = {
+
+  original:{
+    css:"none"
+  },
+
+  warm:{
+    css:
+      "sepia(.16) saturate(1.15) brightness(1.04)"
+  },
+
+  pink:{
+    css:
+      "saturate(1.2) brightness(1.05) hue-rotate(-5deg)"
+  },
+
+  film:{
+    css:
+      "contrast(1.08) saturate(.9) brightness(.98)"
+  },
+
+  bw:{
+    css:
+      "grayscale(1) contrast(1.08)"
+  }
+
+};
+
+
+/* =========================================================
+   UTILS
+========================================================= */
+
+function sleep(ms){
+
+  return new Promise(resolve => {
+
+    setTimeout(
+      resolve,
+      ms
+    );
+
+  });
+
+}
+
+
+function clamp(
+  value,
+  min,
+  max
+){
+
+  return Math.min(
+    max,
+    Math.max(
+      min,
+      value
+    )
+  );
+
+}
+
+
+function showError(message){
+
+  errorBox.innerHTML =
+    message;
+
+  errorBox.style.display =
+    "block";
+
+  setTimeout(() => {
+
+    errorBox.style.display =
+      "none";
+
+  },7000);
+
+}
+
+
+function hideError(){
+
+  errorBox.style.display =
+    "none";
+
+}
+
+
+function setLoading(
+  show,
+  text
+){
+
+  if(text){
+
+    loadingText.textContent =
+      text;
+
+  }
+
+  loading.classList.toggle(
+    "show",
+    show
+  );
+
+}
+
+
+/* =========================================================
+   STOP CAMERA
+========================================================= */
+
+function stopCamera(){
+
+  if(stream){
+
+    stream
+      .getTracks()
+      .forEach(track => {
+
+        try{
+
+          track.stop();
+
+        }catch(e){}
+
+      });
+
+  }
+
+  stream = null;
+
+  videoTrack = null;
+
+  video.srcObject = null;
+
+  cameraStarted = false;
+
+  realZoomSupported = false;
+
+}
+
+
+/* =========================================================
+   WAIT VIDEO
+========================================================= */
+
+async function waitForVideo(){
+
+  if(
+    video.readyState <
+    HTMLMediaElement.HAVE_METADATA
+  ){
+
+    await new Promise(resolve => {
+
+      const timeout =
+        setTimeout(
+          resolve,
+          5000
+        );
+
+      video.addEventListener(
+        "loadedmetadata",
+        () => {
+
+          clearTimeout(timeout);
+
+          resolve();
+
+        },
+        {
+          once:true
+        }
+      );
+
+    });
+
+  }
+
+
+  try{
+
+    await video.play();
+
+  }catch(e){
+
+    console.warn(
+      "video.play:",
+      e
+    );
+
+  }
+
+
+  const start =
+    performance.now();
+
+
+  while(
+    performance.now() -
+    start <
+    5000
+  ){
+
+    if(
+      video.videoWidth > 0 &&
+      video.videoHeight > 0 &&
+      !video.paused
+    ){
+
+      return true;
+
+    }
+
+    await sleep(80);
+
+  }
+
+
+  return false;
+
+}
+
+
+/* =========================================================
+   ZOOM CAPABILITIES
+========================================================= */
+
+function detectZoomCapabilities(){
+
+  realZoomSupported =
+    false;
+
+  realZoomMin =
+    1;
+
+  realZoomMax =
+    1;
+
+  realZoomStep =
+    .1;
+
+
+  if(
+    !videoTrack ||
+    typeof
+    videoTrack.getCapabilities !==
+    "function"
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const capabilities =
+      videoTrack.getCapabilities();
+
+
+    if(
+      capabilities &&
+      capabilities.zoom
+    ){
+
+      const zoom =
+        capabilities.zoom;
+
+
+      if(
+        typeof zoom.min ===
+        "number" &&
+        typeof zoom.max ===
+        "number"
+      ){
+
+        realZoomMin =
+          Math.max(
+            1,
+            zoom.min
+          );
+
+        realZoomMax =
+          Math.min(
+            MAX_ZOOM,
+            zoom.max
+          );
+
+
+        if(
+          typeof zoom.step ===
+          "number" &&
+          zoom.step > 0
+        ){
+
+          realZoomStep =
+            zoom.step;
+
+        }
+
+
+        if(
+          realZoomMax >=
+          realZoomMin
+        ){
+
+          realZoomSupported =
+            true;
+
+        }
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Zoom capability error:",
+      error
+    );
+
+  }
+
+
+  if(realZoomSupported){
+
+    zoomRange.min =
+      String(realZoomMin);
+
+    zoomRange.max =
+      String(realZoomMax);
+
+    zoomRange.step =
+      String(realZoomStep);
+
+    currentZoom =
+      clamp(
+        currentZoom,
+        realZoomMin,
+        realZoomMax
+      );
+
+  }else{
+
+    zoomRange.min =
+      "1";
+
+    zoomRange.max =
+      String(MAX_ZOOM);
+
+    zoomRange.step =
+      ".1";
+
+    currentZoom =
+      clamp(
+        currentZoom,
+        1,
+        MAX_ZOOM
+      );
+
+  }
+
+
+  zoomRange.value =
+    String(currentZoom);
+
+  updateZoomUI();
+
+}
+
+
+/* =========================================================
+   REAL ZOOM
+========================================================= */
+
+async function applyRealZoom(value){
+
+  if(
+    !videoTrack ||
+    !realZoomSupported
+  ){
+
+    return false;
+
+  }
+
+
+  try{
+
+    await videoTrack.applyConstraints({
+
+      advanced:[
+        {
+          zoom:value
+        }
+      ]
+
+    });
+
+
+    return true;
+
+  }catch(error){
+
+    console.warn(
+      "Real zoom failed:",
+      error
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   FALLBACK ZOOM
+========================================================= */
+
+function applyFallbackZoom(){
+
+  if(realZoomSupported){
+
+    video.style.transform =
+      facingMode === "user"
+        ? "scaleX(-1)"
+        : "none";
+
+    return;
+
+  }
+
+
+  const zoom =
+    Math.max(
+      1,
+      fallbackZoom
+    );
+
+
+  const mirror =
+    facingMode === "user"
+      ? "scaleX(-1)"
+      : "";
+
+
+  video.style.transform =
+    `${mirror} scale(${zoom})`;
+
+}
+
+
+/* =========================================================
+   SET ZOOM
+========================================================= */
+
+async function setZoom(value){
+
+  let target;
+
+
+  if(realZoomSupported){
+
+    target =
+      clamp(
+        Number(value),
+        realZoomMin,
+        realZoomMax
+      );
+
+  }else{
+
+    target =
+      clamp(
+        Number(value),
+        1,
+        MAX_ZOOM
+      );
+
+  }
+
+
+  currentZoom =
+    Math.round(
+      target * 10
+    ) / 10;
+
+
+  zoomRange.value =
+    String(currentZoom);
+
+
+  if(realZoomSupported){
+
+    const success =
+      await applyRealZoom(
+        currentZoom
+      );
+
+
+    if(!success){
+
+      realZoomSupported =
+        false;
+
+      fallbackZoom =
+        currentZoom;
+
+      applyFallbackZoom();
+
+    }
+
+  }else{
+
+    fallbackZoom =
+      currentZoom;
+
+    applyFallbackZoom();
+
+  }
+
+
+  updateZoomUI();
+
+}
+
+
+function updateZoomUI(){
+
+  zoomValue.textContent =
+    `${currentZoom.toFixed(1)}×`;
+
+
+  resetZoomBtn.textContent =
+    currentZoom === 1
+      ? "1×"
+      : "↺";
+
+}
+
+
+/* =========================================================
+   START CAMERA
+========================================================= */
+
+async function startCamera(){
+
+  hideError();
+
+  setLoading(
+    true,
+    "Đang mở camera..."
+  );
+
+
+  stopCamera();
+
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+
+    setLoading(false);
+
+    showError(
+      "Trình duyệt không hỗ trợ camera. " +
+      "Hãy dùng Chrome / Edge / Safari."
+    );
+
+    return false;
+
+  }
+
+
+  const constraints = {
+
+    video:{
+
+      facingMode:{
+        ideal:facingMode
+      },
+
+      width:{
+        ideal:1920
+      },
+
+      height:{
+        ideal:1080
+      },
+
+      frameRate:{
+        ideal:30,
+        max:60
+      }
+
+    },
+
+    audio:false
+
+  };
+
+
+  try{
+
+    stream =
+      await navigator.mediaDevices
+        .getUserMedia(
+          constraints
+        );
+
+  }catch(error){
+
+    console.warn(
+      error
+    );
+
+
+    try{
+
+      stream =
+        await navigator.mediaDevices
+          .getUserMedia({
+
+            video:true,
+
+            audio:false
+
+          });
+
+    }catch(error2){
+
+      setLoading(false);
+
+      handleCameraError(
+        error2
+      );
+
+      return false;
+
+    }
+
+  }
+
+
+  videoTrack =
+    stream.getVideoTracks()[0];
+
+
+  if(!videoTrack){
+
+    stopCamera();
+
+    setLoading(false);
+
+    showError(
+      "Không tìm thấy camera."
+    );
+
+    return false;
+
+  }
+
+
+  video.srcObject =
+    stream;
+
+
+  const ready =
+    await waitForVideo();
+
+
+  if(!ready){
+
+    stopCamera();
+
+    setLoading(false);
+
+    showError(
+      "Camera đã mở nhưng không có hình."
+    );
+
+    return false;
+
+  }
+
+
+  cameraStarted =
+    true;
+
+
+  detectZoomCapabilities();
+
+  applyFallbackZoom();
+
+
+  startOverlay.style.display =
+    "none";
+
+
+  captureBtn.disabled =
+    false;
+
+
+  setLoading(false);
+
+
+  return true;
+
+}
+
+
+/* =========================================================
+   CAMERA ERROR
+========================================================= */
+
+function handleCameraError(error){
+
+  let message =
+    "Không thể mở camera.";
+
+
+  if(
+    error &&
+    error.name ===
+    "NotAllowedError"
+  ){
+
+    message =
+      "Bạn chưa cho phép camera. " +
+      "Hãy cấp quyền Camera cho trình duyệt.";
+
+  }
+
+
+  else if(
+    error &&
+    error.name ===
+    "NotFoundError"
+  ){
+
+    message =
+      "Không tìm thấy camera.";
+
+  }
+
+
+  else if(
+    error &&
+    error.name ===
+    "NotReadableError"
+  ){
+
+    message =
+      "Camera đang được ứng dụng khác sử dụng.";
+
+  }
+
+
+  else if(
+    error &&
+    error.name ===
+    "SecurityError"
+  ){
+
+    message =
+      "Camera bị chặn bởi bảo mật. " +
+      "Hãy mở bằng HTTPS hoặc localhost.";
+
+  }
+
+
+  showError(
+    message
+  );
+
+}
+
+
+/* =========================================================
+   FLIP
+========================================================= */
+
+async function flipCamera(){
+
+  if(!cameraStarted){
+
+    return;
+
+  }
+
+
+  const oldZoom =
+    currentZoom;
+
+
+  facingMode =
+    facingMode === "user"
+      ? "environment"
+      : "user";
+
+
+  setLoading(
+    true,
+    "Đang đổi camera..."
+  );
+
+
+  const success =
+    await startCamera();
+
+
+  if(success){
+
+    await setZoom(
+      oldZoom
+    );
+
+  }
+
+
+  setLoading(false);
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function setFilter(
+  filterName
+){
+
+  if(
+    !filters[filterName]
+  ){
+
+    return;
+
+  }
+
+
+  selectedFilter =
+    filterName;
+
+
+  video.style.filter =
+    filters[
+      filterName
+    ].css;
+
+
+  document
+    .querySelectorAll(
+      ".filterBtn"
+    )
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.filter ===
+        filterName
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+async function runCountdown(){
+
+  countdown.style.display =
+    "flex";
+
+
+  for(
+    let number = 3;
+    number >= 1;
+    number--
+  ){
+
+    countdownNumber.textContent =
+      number;
+
+
+    countdownNumber.style.animation =
+      "none";
+
+
+    void
+      countdownNumber.offsetWidth;
+
+
+    countdownNumber.style.animation =
+      "countPop .65s ease";
+
+
+    await sleep(700);
+
+  }
+
+
+  countdown.style.display =
+    "none";
+
+}
+
+
+/* =========================================================
+   FLASH
+========================================================= */
+
+function triggerFlash(){
+
+  flash.classList.remove(
+    "flashAnim"
+  );
+
+
+  void
+    flash.offsetWidth;
+
+
+  flash.classList.add(
+    "flashAnim"
+  );
+
+}
+
+
+/* =========================================================
+   CROP
+========================================================= */
+
+function getSourceCrop(){
+
+  const vw =
+    video.videoWidth;
+
+  const vh =
+    video.videoHeight;
+
+
+  if(
+    !vw ||
+    !vh
+  ){
+
+    return null;
+
+  }
+
+
+  const targetRatio =
+    PHOTO_WIDTH /
+    PHOTO_HEIGHT;
+
+
+  const sourceRatio =
+    vw /
+    vh;
+
+
+  let cropW;
+
+  let cropH;
+
+  let cropX;
+
+  let cropY;
+
+
+  if(
+    sourceRatio >
+    targetRatio
+  ){
+
+    cropH =
+      vh;
+
+    cropW =
+      vh *
+      targetRatio;
+
+    cropX =
+      (vw - cropW) /
+      2;
+
+    cropY =
+      0;
+
+  }else{
+
+    cropW =
+      vw;
+
+    cropH =
+      vw /
+      targetRatio;
+
+    cropX =
+      0;
+
+    cropY =
+      (vh - cropH) /
+      2;
+
+  }
+
+
+  const zoom =
+    realZoomSupported
+      ? 1
+      : Math.max(
+          1,
+          fallbackZoom
+        );
+
+
+  if(
+    zoom > 1
+  ){
+
+    const newW =
+      cropW /
+      zoom;
+
+    const newH =
+      cropH /
+      zoom;
+
+
+    cropX +=
+      (cropW - newW) /
+      2;
+
+    cropY +=
+      (cropH - newH) /
+      2;
+
+
+    cropW =
+      newW;
+
+    cropH =
+      newH;
+
+  }
+
+
+  return {
+    cropX,
+    cropY,
+    cropW,
+    cropH
+  };
+
+}
+
+
+/* =========================================================
+   CANVAS FILTER
+========================================================= */
+
+function applyCanvasFilter(
+  ctx,
+  filterName
+){
+
+  if(
+    filterName ===
+    "original"
+  ){
+
+    return;
+
+  }
+
+
+  const imageData =
+    ctx.getImageData(
+      0,
+      0,
+      PHOTO_WIDTH,
+      PHOTO_HEIGHT
+    );
+
+
+  const data =
+    imageData.data;
+
+
+  for(
+    let i = 0;
+    i < data.length;
+    i += 4
+  ){
+
+    let r =
+      data[i];
+
+    let g =
+      data[i + 1];
+
+    let b =
+      data[i + 2];
+
+
+    if(
+      filterName ===
+      "warm"
+    ){
+
+      r =
+        r * 1.08 + 8;
+
+      g =
+        g * 1.01 + 3;
+
+      b =
+        b * .90;
+
+    }
+
+
+    if(
+      filterName ===
+      "pink"
+    ){
+
+      r =
+        r * 1.08 + 7;
+
+      g =
+        g * .96;
+
+      b =
+        b * 1.02 + 5;
+
+    }
+
+
+    if(
+      filterName ===
+      "film"
+    ){
+
+      r =
+        r * 1.04;
+
+      g =
+        g * .98;
+
+      b =
+        b * .94;
+
+
+      r =
+        (r - 128) *
+        1.08 +
+        128;
+
+      g =
+        (g - 128) *
+        1.08 +
+        128;
+
+      b =
+        (b - 128) *
+        1.08 +
+        128;
+
+    }
+
+
+    if(
+      filterName ===
+      "bw"
+    ){
+
+      const gray =
+        r * .299 +
+        g * .587 +
+        b * .114;
+
+
+      r = gray;
+
+      g = gray;
+
+      b = gray;
+
+    }
+
+
+    data[i] =
+      clamp(
+        r,
+        0,
+        255
+      );
+
+    data[i + 1] =
+      clamp(
+        g,
+        0,
+        255
+      );
+
+    data[i + 2] =
+      clamp(
+        b,
+        0,
+        255
+      );
+
+  }
+
+
+  ctx.putImageData(
+    imageData,
+    0,
+    0
+  );
+
+}
+
+
+/* =========================================================
+   CAPTURE PHOTO
+========================================================= */
+
+async function capturePhoto(){
+
+  if(
+    !cameraStarted ||
+    isCapturing
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    Nếu đang retake:
+    selectedPhotoIndex chính là vị trí
+    cần thay thế.
+  */
+
+  if(
+    replacingPhoto
+  ){
+
+    if(
+      selectedPhotoIndex < 0 ||
+      selectedPhotoIndex >=
+      PHOTO_COUNT
+    ){
+
+      return;
+
+    }
+
+  }else{
+
+    /*
+      Chụp mới bình thường.
+    */
+
+    if(
+      photos.length >=
+      PHOTO_COUNT
+    ){
+
+      return;
+
+    }
+
+  }
+
+
+  isCapturing =
+    true;
+
+  captureBtn.disabled =
+    true;
+
+
+  try{
+
+    await runCountdown();
+
+
+    triggerFlash();
+
+
+    await sleep(80);
+
+
+    const canvas =
+      document.createElement(
+        "canvas"
+      );
+
+
+    canvas.width =
+      PHOTO_WIDTH;
+
+    canvas.height =
+      PHOTO_HEIGHT;
+
+
+    const ctx =
+      canvas.getContext(
+        "2d",
+        {
+          alpha:false
+        }
+      );
+
+
+    const crop =
+      getSourceCrop();
+
+
+    if(!crop){
+
+      throw new Error(
+        "Không lấy được frame camera."
+      );
+
+    }
+
+
+    /*
+      Mirror camera trước.
+    */
+
+    if(
+      facingMode ===
+      "user"
+    ){
+
+      ctx.translate(
+        PHOTO_WIDTH,
+        0
+      );
+
+      ctx.scale(
+        -1,
+        1
+      );
+
+    }
+
+
+    ctx.drawImage(
+
+      video,
+
+      crop.cropX,
+      crop.cropY,
+      crop.cropW,
+      crop.cropH,
+
+      0,
+      0,
+      PHOTO_WIDTH,
+      PHOTO_HEIGHT
+
+    );
+
+
+    applyCanvasFilter(
+      ctx,
+      selectedFilter
+    );
+
+
+    /*
+      Border.
+    */
+
+    ctx.save();
+
+    ctx.globalAlpha =
+      .12;
+
+    ctx.strokeStyle =
+      "#ffffff";
+
+    ctx.lineWidth =
+      12;
+
+    ctx.strokeRect(
+      6,
+      6,
+      PHOTO_WIDTH - 12,
+      PHOTO_HEIGHT - 12
+    );
+
+    ctx.restore();
+
+
+    /* =====================================================
+       RETAKE
+    ==================================================== */
+
+    if(replacingPhoto){
+
+      photos[
+        selectedPhotoIndex
+      ] =
+        canvas;
+
+    }
+
+    /* =====================================================
+       NORMAL CAPTURE
+    ==================================================== */
+
+    else{
+
+      photos.push(
+        canvas
+      );
+
+    }
+
+
+    updateProgress();
+
+
+    /*
+      Nếu đang retake:
+      quay thẳng về result.
+    */
+
+    if(replacingPhoto){
+
+      replacingPhoto =
+        false;
+
+      stopCamera();
+
+      createStrip();
+
+      buildPhotoSelector();
+
+      resultPage.classList.add(
+        "show"
+      );
+
+      updateRetakeButton();
+
+    }
+
+    /*
+      Nếu chụp đủ 4 ảnh.
+    */
+
+    else if(
+      photos.length ===
+      PHOTO_COUNT
+    ){
+
+      await sleep(300);
+
+      createStrip();
+
+      stopCamera();
+
+      buildPhotoSelector();
+
+      resultPage.classList.add(
+        "show"
+      );
+
+      updateRetakeButton();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    showError(
+      "Có lỗi khi chụp ảnh. Hãy thử lại."
+    );
+
+  }
+
+
+  isCapturing =
+    false;
+
+  captureBtn.disabled =
+    false;
+
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function updateProgress(){
+
+  const count =
+    photos.length;
+
+
+  progressText.textContent =
+    `${count} / ${PHOTO_COUNT}`;
+
+
+  progressBar.style.width =
+    `${(
+      count /
+      PHOTO_COUNT
+    ) * 100}%`;
+
+}
+
+
+/* =========================================================
+   SELECT PHOTO
+========================================================= */
+
+function selectPhoto(
+  index
+){
+
+  if(
+    index < 0 ||
+    index >= photos.length
+  ){
+
+    return;
+
+  }
+
+
+  selectedPhotoIndex =
+    index;
+
+
+  buildPhotoSelector();
+
+  updateRetakeButton();
+
+}
+
+
+/* =========================================================
+   BUILD PHOTO SELECTOR
+========================================================= */
+
+function buildPhotoSelector(){
+
+  photoSlots.innerHTML =
+    "";
+
+
+  for(
+    let i = 0;
+    i < PHOTO_COUNT;
+    i++
+  ){
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+
+    button.type =
+      "button";
+
+
+    button.className =
+      "photoSlot";
+
+
+    if(
+      i ===
+      selectedPhotoIndex
+    ){
+
+      button.classList.add(
+        "selected"
+      );
+
+    }
+
+
+    /*
+      Number.
+    */
+
+    const number =
+      document.createElement(
+        "div"
+      );
+
+
+    number.className =
+      "slotNumber";
+
+
+    number.textContent =
+      String(i + 1);
+
+
+    button.appendChild(
+      number
+    );
+
+
+    /*
+      Image.
+    */
+
+    if(
+      photos[i]
+    ){
+
+      const img =
+        document.createElement(
+          "img"
+        );
+
+
+      img.src =
+        photos[i].toDataURL(
+          "image/jpeg",
+          .88
+        );
+
+
+      img.alt =
+        `Ảnh ${i + 1}`;
+
+
+      button.appendChild(
+        img
+      );
+
+    }else{
+
+      const empty =
+        document.createElement(
+          "div"
+        );
+
+
+      empty.style.cssText = `
+        width:100%;
+        height:100%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#666;
+        font-size:24px;
+      `;
+
+
+      empty.textContent =
+        "＋";
+
+
+      button.appendChild(
+        empty
+      );
+
+    }
+
+
+    /*
+      Selected mark.
+    */
+
+    const mark =
+      document.createElement(
+        "div"
+      );
+
+
+    mark.className =
+      "selectedMark";
+
+
+    mark.textContent =
+      "✓";
+
+
+    button.appendChild(
+      mark
+    );
+
+
+    /*
+      Click.
+    */
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if(
+          photos[i]
+        ){
+
+          selectPhoto(i);
+
+        }
+
+      }
+    );
+
+
+    photoSlots.appendChild(
+      button
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RETAKE BUTTON TEXT
+========================================================= */
+
+function updateRetakeButton(){
+
+  retakeSelectedBtn.textContent =
+    `📸 Chụp lại ảnh số ${
+      selectedPhotoIndex + 1
+    }`;
+
+}
+
+
+/* =========================================================
+   RETAKE SELECTED
+========================================================= */
+
+async function retakeSelectedPhoto(){
+
+  if(
+    !photos[
+      selectedPhotoIndex
+    ]
+  ){
+
+    return;
+
+  }
+
+
+  replacingPhoto =
+    true;
+
+
+  resultPage.classList.remove(
+    "show"
+  );
+
+
+  cameraPage.style.display =
+    "flex";
+
+
+  /*
+    Giữ filter hiện tại.
+  */
+
+  setFilter(
+    selectedFilter
+  );
+
+
+  /*
+    Reset camera zoom UI
+    không bắt buộc; giữ zoom hiện tại.
+  */
+
+  const success =
+    await startCamera();
+
+
+  if(!success){
+
+    replacingPhoto =
+      false;
+
+    resultPage.classList.add(
+      "show"
+    );
+
+    return;
+
+  }
+
+}
+
+
+/* =========================================================
+   RETAKE ALL
+========================================================= */
+
+async function resetAll(){
+
+  stopCamera();
+
+
+  photos = [];
+
+
+  selectedPhotoIndex =
+    0;
+
+
+  replacingPhoto =
+    false;
+
+
+  currentZoom =
+    1;
+
+
+  fallbackZoom =
+    1;
+
+
+  updateProgress();
+
+
+  buildPhotoSelector();
+
+
+  resultPage.classList.remove(
+    "show"
+  );
+
+
+  startOverlay.style.display =
+    "flex";
+
+
+  setFilter(
+    "original"
+  );
+
+
+  await startCamera();
+
+}
+
+
+/* =========================================================
+   FRAME
+========================================================= */
+
+function selectFrame(
+  frame
+){
+
+  selectedFrame =
+    frame;
+
+
+  document
+    .querySelectorAll(
+      ".frameBtn"
+    )
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.frame ===
+        frame
+      );
+
+    });
+
+
+  framePanel.classList.remove(
+    "show"
+  );
+
+
+  /*
+    Nếu đã có ảnh,
+    cập nhật strip ngay.
+  */
+
+  if(
+    photos.length ===
+    PHOTO_COUNT
+  ){
+
+    createStrip();
+
+  }
+
+}
+
+
+/* =========================================================
+   CREATE STRIP
+========================================================= */
+
+function createStrip(){
+
+  const padding =
+    55;
+
+  const photoGap =
+    22;
+
+  const headerHeight =
+    135;
+
+  const footerHeight =
+    115;
+
+
+  const stripWidth =
+    PHOTO_WIDTH +
+    padding * 2;
+
+
+  const stripHeight =
+    padding +
+    headerHeight +
+    (
+      PHOTO_HEIGHT *
+      PHOTO_COUNT
+    ) +
+    (
+      photoGap *
+      (PHOTO_COUNT - 1)
+    ) +
+    footerHeight +
+    padding;
+
+
+  stripCanvas.width =
+    stripWidth;
+
+  stripCanvas.height =
+    stripHeight;
+
+
+  const ctx =
+    stripCanvas.getContext(
+      "2d"
+    );
+
+
+  drawStripBackground(
+    ctx,
+    stripWidth,
+    stripHeight
+  );
+
+
+  /*
+    HEADER
+  */
+
+  ctx.save();
+
+  ctx.fillStyle =
+    getFrameColor(
+      selectedFrame
+    );
+
+  ctx.textAlign =
+    "center";
+
+  ctx.textBaseline =
+    "middle";
+
+
+  ctx.font =
+    "900 48px Arial";
+
+
+  ctx.fillText(
+    "💕 SWEET BOOTH 💕",
+    stripWidth / 2,
+    padding +
+    headerHeight / 2 -
+    12
+  );
+
+
+  ctx.font =
+    "600 22px Arial";
+
+
+  ctx.globalAlpha =
+    .65;
+
+
+  ctx.fillText(
+    "little moments, big memories",
+    stripWidth / 2,
+    padding +
+    headerHeight / 2 +
+    36
+  );
+
+
+  ctx.restore();
+
+
+  /*
+    PHOTOS
+  */
+
+  let y =
+    padding +
+    headerHeight;
+
+
+  photos.forEach(
+    (photo,index) => {
+
+      ctx.save();
+
+      ctx.shadowColor =
+        "rgba(0,0,0,.20)";
+
+      ctx.shadowBlur =
+        18;
+
+      ctx.shadowOffsetY =
+        6;
+
+
+      ctx.fillStyle =
+        "#fff";
+
+
+      ctx.fillRect(
+        padding,
+        y,
+        PHOTO_WIDTH,
+        PHOTO_HEIGHT
+      );
+
+
+      ctx.restore();
+
+
+      ctx.drawImage(
+        photo,
+        padding,
+        y,
+        PHOTO_WIDTH,
+        PHOTO_HEIGHT
+      );
+
+
+      ctx.save();
+
+      ctx.strokeStyle =
+        getFrameColor(
+          selectedFrame
+        );
+
+      ctx.globalAlpha =
+        .28;
+
+      ctx.lineWidth =
+        8;
+
+      ctx.strokeRect(
+        padding,
+        y,
+        PHOTO_WIDTH,
+        PHOTO_HEIGHT
+      );
+
+      ctx.restore();
+
+
+      y +=
+        PHOTO_HEIGHT +
+        photoGap;
+
+    }
+  );
+
+
+  /*
+    FOOTER
+  */
+
+  ctx.save();
+
+  ctx.textAlign =
+    "center";
+
+  ctx.textBaseline =
+    "middle";
+
+
+  ctx.fillStyle =
+    getFrameColor(
+      selectedFrame
+    );
+
+
+  ctx.font =
+    "800 34px Arial";
+
+
+  ctx.fillText(
+    "made with love ♡",
+    stripWidth / 2,
+    y +
+    footerHeight / 2 -
+    10
+  );
+
+
+  ctx.font =
+    "500 20px Arial";
+
+
+  ctx.globalAlpha =
+    .55;
+
+
+  ctx.fillText(
+    new Date().toLocaleDateString(
+      "vi-VN"
+    ),
+    stripWidth / 2,
+    y +
+    footerHeight / 2 +
+    30
+  );
+
+
+  ctx.restore();
+
+
+  drawDecorations(
+    ctx,
+    stripWidth,
+    stripHeight
+  );
+
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+function drawStripBackground(
+  ctx,
+  width,
+  height
+){
+
+  let background =
+    "#ffffff";
+
+
+  if(
+    selectedFrame ===
+    "pink"
+  ){
+
+    background =
+      "#fff0f6";
+
+  }
+
+
+  if(
+    selectedFrame ===
+    "black"
+  ){
+
+    background =
+      "#181818";
+
+  }
+
+
+  if(
+    selectedFrame ===
+    "flower"
+  ){
+
+    background =
+      "#fffaf2";
+
+  }
+
+
+  ctx.fillStyle =
+    background;
+
+
+  ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+}
+
+
+/* =========================================================
+   FRAME COLOR
+========================================================= */
+
+function getFrameColor(
+  frame
+){
+
+  if(
+    frame ===
+    "pink"
+  ){
+
+    return "#e75c91";
+
+  }
+
+
+  if(
+    frame ===
+    "black"
+  ){
+
+    return "#ffffff";
+
+  }
+
+
+  if(
+    frame ===
+    "flower"
+  ){
+
+    return "#c87592";
+
+  }
+
+
+  return "#333333";
+
+}
+
+
+/* =========================================================
+   DECORATIONS
+========================================================= */
+
+function drawDecorations(
+  ctx,
+  width,
+  height
+){
+
+  if(
+    selectedFrame ===
+    "white"
+  ){
+
+    return;
+
+  }
+
+
+  ctx.save();
+
+  ctx.textAlign =
+    "center";
+
+  ctx.textBaseline =
+    "middle";
+
+
+  if(
+    selectedFrame ===
+    "pink"
+  ){
+
+    ctx.font =
+      "34px Arial";
+
+    ctx.globalAlpha =
+      .75;
+
+
+    const flowers = [
+
+      ["🌸",35,35],
+
+      ["🌷",width-35,35],
+
+      ["💗",35,height-35],
+
+      ["🌸",width-35,height-35]
+
+    ];
+
+
+    flowers.forEach(
+      item => {
+
+        ctx.fillText(
+          item[0],
+          item[1],
+          item[2]
+        );
+
+      }
+    );
+
+  }
+
+
+  if(
+    selectedFrame ===
+    "flower"
+  ){
+
+    ctx.font =
+      "32px Arial";
+
+
+    const emojis = [
+      "🌷",
+      "🌸",
+      "🌼",
+      "💐"
+    ];
+
+
+    for(
+      let i = 0;
+      i < 14;
+      i++
+    ){
+
+      const x =
+        25 +
+        Math.random() *
+        (width - 50);
+
+
+      const y =
+        20 +
+        Math.random() *
+        (height - 40);
+
+
+      ctx.globalAlpha =
+        .12 +
+        Math.random() *
+        .25;
+
+
+      ctx.fillText(
+        emojis[
+          i %
+          emojis.length
+        ],
+        x,
+        y
+      );
+
+    }
+
+  }
+
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+function downloadStrip(){
+
+  if(
+    !stripCanvas.width
+  ){
+
+    return;
+
+  }
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  const date =
+    new Date();
+
+
+  const yyyy =
+    date.getFullYear();
+
+
+  const mm =
+    String(
+      date.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const dd =
+    String(
+      date.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  link.download =
+    `sweet-booth-${yyyy}-${mm}-${dd}.jpg`;
+
+
+  link.href =
+    stripCanvas.toDataURL(
+      "image/jpeg",
+      .95
+    );
+
+
+  document.body.appendChild(
+    link
+  );
+
+
+  link.click();
+
+
+  link.remove();
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+/* START */
+
+startBtn.addEventListener(
+  "click",
+  async () => {
+
+    await startCamera();
+
+  }
+);
+
+
+/* CAPTURE */
+
+captureBtn.addEventListener(
+  "click",
+  async () => {
+
+    await capturePhoto();
+
+  }
+);
+
+
+/* FLIP */
+
+flipBtn.addEventListener(
+  "click",
+  async () => {
+
+    await flipCamera();
+
+  }
+);
+
+
+/* ZOOM */
+
+zoomRange.addEventListener(
+  "input",
+  async event => {
+
+    await setZoom(
+      Number(
+        event.target.value
+      )
+    );
+
+  }
+);
+
+
+zoomPlus.addEventListener(
+  "click",
+  async () => {
+
+    const step =
+      realZoomSupported
+        ? realZoomStep
+        : .1;
+
+
+    await setZoom(
+      currentZoom +
+      step
+    );
+
+  }
+);
+
+
+zoomMinus.addEventListener(
+  "click",
+  async () => {
+
+    const step =
+      realZoomSupported
+        ? realZoomStep
+        : .1;
+
+
+    await setZoom(
+      currentZoom -
+      step
+    );
+
+  }
+);
+
+
+resetZoomBtn.addEventListener(
+  "click",
+  async () => {
+
+    await setZoom(1);
+
+  }
+);
+
+
+/* FILTERS */
+
+document
+  .querySelectorAll(
+    ".filterBtn"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        setFilter(
+          button.dataset.filter
+        );
+
+      }
+    );
+
+  });
+
+
+/* FRAME */
+
+frameBtn.addEventListener(
+  "click",
+  () => {
+
+    framePanel.classList.toggle(
+      "show"
+    );
+
+  }
+);
+
+
+/* FRAME BUTTONS */
+
+document
+  .querySelectorAll(
+    ".frameBtn"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        selectFrame(
+          button.dataset.frame
+        );
+
+      }
+    );
+
+  });
+
+
+/* RETAKE SELECTED */
+
+retakeSelectedBtn.addEventListener(
+  "click",
+  async () => {
+
+    await retakeSelectedPhoto();
+
+  }
+);
+
+
+/* RETAKE ALL */
+
+againBtn.addEventListener(
+  "click",
+  async () => {
+
+    await resetAll();
+
+  }
+);
+
+
+/* DOWNLOAD */
+
+downloadBtn.addEventListener(
+  "click",
+  () => {
+
+    downloadStrip();
+
+  }
+);
+
+
+/* =========================================================
+   VISIBILITY
+========================================================= */
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if(
+      document.hidden
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      cameraStarted &&
+      videoTrack &&
+      videoTrack.readyState ===
+      "ended"
+    ){
+
+      startCamera();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   BEFORE UNLOAD
+========================================================= */
+
+window.addEventListener(
+  "beforeunload",
+  () => {
+
+    stopCamera();
+
+  }
+);
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+captureBtn.disabled =
+  false;
+
+
+setFilter(
+  "original"
+);
+
+
+updateZoomUI();
+
+updateProgress();
+
+buildPhotoSelector();
+
+updateRetakeButton();
+
+})();
+</script>
+
+</body>
+</html>
